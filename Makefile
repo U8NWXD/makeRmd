@@ -29,6 +29,10 @@
 # Adapted from the Sphinx project at sphinx-doc.org (see license at end)
 
 # Knit RMarkdown Files
+# To use this file, place it in a directory of RMarkdown files you wish
+# to knit. Activate any applicable virtual environments, and run
+# `make [pdf | html | word | default]` to knit all files ending in
+# `*.Rmd`.
 
 HELPTEXT = "Available arguments are pdf, html, word, and default"
 
