@@ -6,6 +6,16 @@
 # project comes with ABSOLUTELY NO WARRANTY. See LICENSE.txt for
 # details.
 
-# Thanks to https://stackoverflow.com/a/4774063 for this one-liner
-SCRIPTPATH="$( cd "$(dirname "$0")" ; pwd -P )"
-cp "$SCRIPTPATH/Makefile" Makefile
+# Thanks to https://stackoverflow.com/a/246128 for guiding me
+path="$0"
+# While $path is a symlink, resolve
+while [[ -h $path ]]; do
+    parent="$( cd -P "$( dirname "$path" )" >/dev/null 2>&1 && pwd )"
+    path="$( readlink "$path" )"
+    # For relative symlinks, prepend parent path
+    if [[ $path != /* ]]; then
+        path="$parent/$path"
+    fi
+done
+parent="$( cd -P "$( dirname "$path" )" >/dev/null 2>&1 && pwd )"
+cp "$parent/Makefile" Makefile
