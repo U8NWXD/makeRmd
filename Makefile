@@ -7,29 +7,37 @@
 TOKNIT = test.Rmd
 HELPTEXT = "Available arguments are pdf, html, word, and default"
 
+# Arguments:
+# 	Knit output type (e.g. pdf_document)
+# 	Path to RMarkdown file to knit (e.g. test.Rmd)
+#knit() {
+#	Rscript -e "library(rmarkdown); library(utils); render('$(2)', '$(1)')"
+#}
+
+# Arguments:
+# 	Knit output type (e.g. pdf_document)
+knitall = find . -name '*.Rmd' | xargs knit $(1)
+
+SRC=$(wildcard *.Rmd)
+
 # First so that "make" without argument is like "make help".
 help:
 	@echo "$(HELPTEXT)"
 
-.PHONY: help Makefile
+.PHONY: help
 
 # Targets to knit various types of files
-pdf:
-	@Rscript -e "library(rmarkdown); library(utils); render('$(TOKNIT)', 'pdf_document')"
+pdf: $(SRC)
+	@for f in $^; do Rscript -e "library(rmarkdown); library(utils); render('$$f', 'pdf_document')"; done
 
-html:
-	@Rscript -e "library(rmarkdown); library(utils); render('$(TOKNIT)', 'html_document')"
+html: $(SRC)
+	@for f in $^; do Rscript -e "library(rmarkdown); library(utils); render('$$f', 'html_document')"; done
 
-word:
-	@Rscript -e "library(rmarkdown); library(utils); render('$(TOKNIT)', 'word_document')"
+word: $(SRC)
+	@for f in $^; do Rscript -e "library(rmarkdown); library(utils); render('$$f', 'word_document')"; done
 
-default:
-	@Rscript -e "library(rmarkdown); library(utils); render('$(TOKNIT)', 'all')"
-
-# For unrecognized arguments, print help text
-%: Makefile
-	@echo "$(HELPTEXT)"
-
+default: $(SRC)
+	@for f in $^; do Rscript -e "library(rmarkdown); library(utils); render('$$f', 'all')"; done
 # Reproduction of license and copyright from Sphinx project:
 #
 # Copyright (c) 2007-2019 by the Sphinx team (see AUTHORS file).
